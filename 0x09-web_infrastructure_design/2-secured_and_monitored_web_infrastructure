@@ -1,0 +1,127 @@
+Secured and Monitored Web Infrastructure Design
+
+Diagram Explanation
+
+This enhanced infrastructure adds security and monitoring components:
+
+
+
+'''
+
+[User Computer]
+    |
+    | (HTTPS requests via www.foobar.com)
+    |
+[Firewall 1] ── [Load Balancer (HAProxy with SSL termination)] 8.8.8.8
+    /               \
+[Firewall 2]    [Firewall 3]
+[Web Server 1]    [Web Server 2] (Nginx + Monitoring)
+    |                  |
+[App Server 1]    [App Server 2]
+    \                  /
+[Primary DB] ---- [Replica DB] (MySQL Master-Slave)
+[Monitoring Server] (Sumo Logic/Data Collector)
+
+'''
+
+Added Components and Their Purpose
+Firewalls:
+
+One at load balancer level to filter incoming traffic
+
+One per web server for internal network segmentation
+
+Protect against DDoS, brute force attacks, and unauthorized access
+
+SSL Certificate (HTTPS):
+
+Encrypts data in transit between users and servers
+
+Provides authentication (verifies server identity)
+
+Required for modern web security standards
+
+Monitoring Clients:
+
+Collect metrics from each server (CPU, memory, disk, network)
+
+Track application performance (response times, errors)
+
+Send data to central monitoring service (Sumo Logic, Datadog, etc.)
+
+Infrastructure Details
+Firewall Functions:
+
+Stateful inspection of network traffic
+
+Access control based on IP/port rules
+
+Protection against common web attacks
+
+HTTPS Importance:
+
+Prevents eavesdropping on sensitive data
+
+Protects against man-in-the-middle attacks
+
+Required for many browser features
+
+Improves SEO rankings
+
+Monitoring Implementation:
+
+Agents installed on each server collect:
+
+System metrics (CPU, RAM, disk)
+
+Application metrics (response times, errors)
+
+Web server logs (Nginx access/error logs)
+
+Data sent to centralized monitoring dashboard
+
+Alerts configured for abnormal conditions
+
+Monitoring Web Server QPS:
+
+Configure monitoring agent to collect Nginx metrics
+
+Track requests per second from access logs
+
+Set up real-time dashboard for QPS visualization
+
+Create alerts for abnormal QPS spikes/drops
+
+Persistent Issues
+SSL Termination at Load Balancer:
+
+Traffic between LB and web servers is unencrypted (potential security risk)
+
+Better solution: End-to-end encryption with SSL passthrough
+
+Single Write MySQL Server:
+
+Primary DB remains a SPOF for write operations
+
+During failover, some data might be lost
+
+Write operations can't scale horizontally
+
+Identical Components on Servers:
+
+Resource contention (DB and app competing for resources)
+
+Security risk (compromise of one service could lead to others)
+
+Better to separate concerns (dedicated DB servers, app servers)
+
+Additional Limitations
+No geographic redundancy
+
+Limited database read scalability (only one replica)
+
+No caching layer for improved performance
+
+No disaster recovery solution
+
+Certificate management complexity
