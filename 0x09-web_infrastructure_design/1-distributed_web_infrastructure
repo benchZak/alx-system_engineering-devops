@@ -1,0 +1,111 @@
+Distributed Web Infrastructure Design
+
+Diagram Explanation
+
+This distributed infrastructure improves upon the simple setup by adding redundancy and load distribution:
+
+'''
+
+[User Computer]
+    |
+    | (HTTP/HTTPS requests via www.foobar.com)
+    |
+[DNS Server]
+    |
+[Load Balancer (HAProxy)] 8.8.8.8
+    /               \
+[Web Server 1]    [Web Server 2] (Both with Nginx)
+    |                  |
+[App Server 1]    [App Server 2]
+    \                  /
+[Primary DB] ---- [Replica DB] (MySQL Master-Slave)
+
+'''
+
+Added Components and Their Purpose
+Additional Server:
+
+Provides redundancy (if one fails, the other can handle traffic)
+
+Allows for load distribution across multiple servers
+
+Load Balancer (HAProxy):
+
+Distributes incoming traffic across multiple web servers
+
+Uses Round Robin algorithm by default (cycles through servers sequentially)
+
+Provides health checks to remove failed servers from rotation
+
+Primary-Replica Database:
+
+Primary handles all write operations
+
+Replica synchronizes with primary and handles read operations
+
+Provides read scalability and failover capability
+
+Load Balancer Configuration
+Active-Active Setup: Both web servers handle traffic simultaneously
+
+Pros: Maximizes resource utilization, better performance
+
+Cons: More complex configuration
+
+Active-Passive Setup: One server handles traffic while the other is on standby
+
+Pros: Simple failover
+
+Cons: Wasted resources during normal operation
+
+This infrastructure uses Active-Active for better performance.
+
+Database Cluster Details
+Primary Node:
+
+Handles all write operations (INSERT, UPDATE, DELETE)
+
+Logs changes to binary log for replication
+
+Application writes must go to primary
+
+Replica Node:
+
+Receives and applies changes from primary's binary log
+
+Can handle read operations (SELECT queries)
+
+Provides read scalability and backup
+
+Infrastructure Issues
+Remaining SPOFs:
+
+Load balancer (if it fails, traffic stops)
+
+Primary database (if it fails before replica promotion)
+
+Single HAProxy instance
+
+Security Issues:
+
+No firewall to filter malicious traffic
+
+No HTTPS (communications not encrypted)
+
+No intrusion detection/prevention system
+
+Monitoring Absence:
+
+No way to track server health
+
+No performance metrics collection
+
+No alerting for failures
+
+Other Limitations:
+
+No geographic distribution
+
+No caching layer
+
+Limited database write scalability
