@@ -1,0 +1,31 @@
+
+## Components
+1. **Server**: Single machine (IP: `8.8.8.8`) hosting all components.
+2. **Web Server (Nginx)**: 
+   - Handles HTTP/HTTPS requests.
+   - Serves static files.
+   - Proxies dynamic requests to the app server.
+3. **Application Server**: 
+   - Runs backend code (e.g., PHP/Python/Node.js).
+   - Processes business logic.
+4. **Database (MySQL)**: 
+   - Stores and manages data.
+5. **Domain (foobar.com)**: 
+   - `www` record (CNAME/A) points to `8.8.8.8`.
+
+## Key Explanations
+- **Server**: Hardware/software that responds to client requests.
+- **Domain Role**: Human-friendly alias for IP (`www.foobar.com` → `8.8.8.8`).
+- **`www` Record Type**: `CNAME` (alias) or `A` (direct IP mapping).
+- **Web Server Role**: Handles HTTP traffic, SSL termination, static content.
+- **App Server Role**: Executes application code (dynamic content).
+- **Database Role**: Persistent data storage/retrieval.
+- **Communication**: HTTP/HTTPS over TCP/IP.
+
+## Issues
+- **SPOF**: Single server = complete outage if it fails.
+- **Downtime**: Maintenance (e.g., deployments) requires downtime.
+- **Scaling**: Cannot handle traffic spikes (no load balancing/redundancy).
+
+---
+**Repo**: [0-simple_web_stack](https://github.com/alx-system_engineering-devops/0x09-web_infrastructure_design/blob/main/0-simple_web_stack)
