@@ -1,0 +1,108 @@
+Scaled Up Web Infrastructure Design
+Diagram Explanation
+This scaled-up infrastructure separates components and adds redundancy:
+
+'''
+
+[User Computer]
+    |
+    | (HTTPS requests via www.foobar.com)
+    |
+[Firewall] 
+    |
+[HAProxy Cluster] (Active/Passive with keepalived/vrrp)
+    /               \
+[Web Server 1]    [Web Server 2] (Nginx only)
+    |                  |
+[App Server 1]    [App Server 2] (Application only)
+    \                  /
+[Primary DB] ---- [Replica DB] (Dedicated MySQL servers)
+    |
+[Replica DB 2] (Additional read replica)
+[Monitoring] [Backup] [Cache Server]
+
+'''
+
+Added Components and Their Purpose
+Additional Server:
+
+Dedicated servers for each layer (web, app, database)
+
+Better resource isolation and performance
+
+Allows independent scaling of each component
+
+HAProxy Cluster:
+
+Two load balancers in active-passive configuration
+
+Uses VRRP/keepalived for failover
+
+Eliminates load balancer as SPOF
+
+Component Separation:
+
+Web servers only handle HTTP/HTTPS traffic
+
+App servers only process application logic
+
+Database servers only handle data storage
+
+Each can scale independently as needed
+
+Infrastructure Benefits
+Improved Performance:
+
+No resource contention between components
+
+Each layer optimized for its specific workload
+
+Better Reliability:
+
+Load balancer cluster eliminates LB SPOF
+
+Dedicated database servers improve data reliability
+
+Failure in one component doesn't affect others
+
+Enhanced Scalability:
+
+Can scale web tier independently of app tier
+
+Multiple database read replicas for read scaling
+
+Option to add more replicas or shards as needed
+
+Operational Flexibility:
+
+Can update/restart components independently
+
+Easier to troubleshoot performance issues
+
+More granular security controls
+
+Remaining Challenges
+Database Write Scaling:
+
+Still only one primary database for writes
+
+Consider sharding or other write-scale solutions
+
+Global Distribution:
+
+All servers in single location
+
+Could add geographic distribution
+
+Advanced Caching:
+
+Could add Redis/Memcached cluster
+
+Reduce database load for common queries
+
+Backup Strategy:
+
+Need comprehensive backup solution
+
+Point-in-time recovery capability
+
