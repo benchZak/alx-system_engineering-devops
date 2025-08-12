@@ -1,31 +1,48 @@
+Simple Web Stack (1-Server Infrastructure)
+Flow
+User → DNS (www.foobar.com → 8.8.8.8) → Nginx → App Server → MySQL
 
-## Components
-1. **Server**: Single machine (IP: `8.8.8.8`) hosting all components.
-2. **Web Server (Nginx)**: 
-   - Handles HTTP/HTTPS requests.
-   - Serves static files.
-   - Proxies dynamic requests to the app server.
-3. **Application Server**: 
-   - Runs backend code (e.g., PHP/Python/Node.js).
-   - Processes business logic.
-4. **Database (MySQL)**: 
-   - Stores and manages data.
-5. **Domain (foobar.com)**: 
-   - `www` record (CNAME/A) points to `8.8.8.8`.
+Components
+Server: Single machine (IP 8.8.8.8).
 
-## Key Explanations
-- **Server**: Hardware/software that responds to client requests.
-- **Domain Role**: Human-friendly alias for IP (`www.foobar.com` → `8.8.8.8`).
-- **`www` Record Type**: `CNAME` (alias) or `A` (direct IP mapping).
-- **Web Server Role**: Handles HTTP traffic, SSL termination, static content.
-- **App Server Role**: Executes application code (dynamic content).
-- **Database Role**: Persistent data storage/retrieval.
-- **Communication**: HTTP/HTTPS over TCP/IP.
+Web Server (Nginx):
 
-## Issues
-- **SPOF**: Single server = complete outage if it fails.
-- **Downtime**: Maintenance (e.g., deployments) requires downtime.
-- **Scaling**: Cannot handle traffic spikes (no load balancing/redundancy).
+Handles HTTP/HTTPS.
 
----
-**Repo**: [0-simple_web_stack](https://github.com/alx-system_engineering-devops/0x09-web_infrastructure_design/blob/main/0-simple_web_stack)
+Serves static files.
+
+Proxies dynamic requests to App Server.
+
+Application Server:
+
+Runs backend code (e.g., PHP/Python).
+
+Database (MySQL):
+
+Stores data.
+
+Domain (foobar.com):
+
+www record (CNAME/A) → 8.8.8.8.
+
+Key Explanations
+Server: Responds to requests (hardware/software).
+
+Domain: Maps www.foobar.com to 8.8.8.8.
+
+www Record: CNAME (alias) or A (IP).
+
+Web Server: Serves static content, proxies dynamic requests.
+
+App Server: Executes application logic.
+
+Database: Manages data storage.
+
+Communication: HTTP/HTTPS (TCP/IP).
+
+Issues
+SPOF: One server = total failure if crashes.
+
+Downtime: Maintenance requires service interruption.
+
+Scaling: Cannot handle high traffic.
