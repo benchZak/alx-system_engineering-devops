@@ -1,48 +1,81 @@
-Simple Web Stack (1-Server Infrastructure)
-Flow
-User → DNS (www.foobar.com → 8.8.8.8) → Nginx → App Server → MySQL
+Simple Web Stack Design
 
-Components
-Server: Single machine (IP 8.8.8.8).
+Diagram Explanation
+
+For this simple web stack, I've designed a basic LAMP (Linux, Apache/Nginx, MySQL, PHP/Python) infrastructure with a single server:
+
+'''
+
+[User Computer] 
+    |
+    | (HTTP/HTTPS requests via www.foobar.com)
+    |
+[DNS Server] (Resolves www.foobar.com to 8.8.8.8)
+    |
+    |
+[Single Server @ 8.8.8.8]
+    ├── [Nginx Web Server]
+    ├── [Application Server]
+    ├── [Application Files]
+    └── [MySQL Database]
+
+'''
+
+Component Explanations
+
+Server: A physical or virtual machine that provides services to other devices (clients) over a network. In this case, it hosts all our web infrastructure components.
+
+Domain Name (foobar.com):
+
+Human-readable address that maps to an IP address (8.8.8.8) via DNS
+
+The www record is a CNAME record that points to foobar.com (which has an A record pointing to 8.8.8.8)
 
 Web Server (Nginx):
 
-Handles HTTP/HTTPS.
+Handles HTTP/HTTPS requests
 
-Serves static files.
+Serves static content
 
-Proxies dynamic requests to App Server.
+Acts as reverse proxy passing dynamic requests to application server
 
 Application Server:
 
-Runs backend code (e.g., PHP/Python).
+Executes the business logic of the application
+
+Processes dynamic content
+
+Communicates with the database as needed
 
 Database (MySQL):
 
-Stores data.
+Stores and manages all persistent data
 
-Domain (foobar.com):
+Handles data queries from the application server
 
-www record (CNAME/A) → 8.8.8.8.
+Communication Protocol:
 
-Key Explanations
-Server: Responds to requests (hardware/software).
+The server communicates with user computers primarily via HTTP/HTTPS over TCP/IP
 
-Domain: Maps www.foobar.com to 8.8.8.8.
+Infrastructure Issues
+Single Point of Failure (SPOF):
 
-www Record: CNAME (alias) or A (IP).
+The entire system goes down if the single server fails
 
-Web Server: Serves static content, proxies dynamic requests.
+No redundancy at any level (web server, app server, or database)
 
-App Server: Executes application logic.
+Downtime During Maintenance:
 
-Database: Manages data storage.
+Any maintenance requires taking the entire system offline
 
-Communication: HTTP/HTTPS (TCP/IP).
+Deploying new code means restarting services, causing temporary unavailability
 
-Issues
-SPOF: One server = total failure if crashes.
+Scaling Limitations:
 
-Downtime: Maintenance requires service interruption.
+A single server has finite resources (CPU, memory, bandwidth)
 
-Scaling: Cannot handle high traffic.
+Cannot handle traffic spikes effectively
+
+No load distribution mechanism
+
+
